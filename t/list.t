@@ -42,5 +42,30 @@ is_deeply(
     '[1..3] >>= \x -> [4..6] >>= \y -> [x * y, x + y] works',
 );
 
+is_deeply(
+    Data::List->zero->plus(Data::List->zero)->list,
+    [],
+    '[] + [] == []',
+);
+
+
+is_deeply(
+    Data::List->zero->plus(Data::List->new(list => [1..10]))->list,
+    [1..10],
+    '[] + [1..10] == [1..10]',
+);
+
+
+is_deeply(
+    Data::List->new(list => [1..10])->plus(Data::List->zero)->list,
+    [1..10],
+    '[1..10] + [] == [1..10]',
+);
+
+is_deeply(
+    Data::List->new(list => [1..10])->plus(Data::List->new(list => [11..20]))->list,
+    [1..20],
+    '[1..10] + [11..20] == [1..20]',
+);
 
 done_testing;

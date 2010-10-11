@@ -3,7 +3,7 @@ package Data::List;
 use Moose;
 use namespace::autoclean;
 
-with 'Data::Monad::Cat', 'Data::Functor::Applicative::FromMonad';
+with 'Data::MonadPlus', 'Data::Monad::Cat', 'Data::Functor::Applicative::FromMonad';
 
 has 'list' => (
     is       => 'ro',
@@ -31,6 +31,19 @@ sub join {
     );
 }
 
+sub zero {
+    my ($class) = @_;
+    $class = $class->meta->name if blessed $class;
+    return $class->new( list => [] );
+}
+
+sub plus {
+    my ($self, $other) = @_;
+    return $self->meta->name->new(
+        list => [ map { @{$_->list} } ($self, $other) ],
+    );
+}
+
 1;
 
 __END__
@@ -47,3 +60,5 @@ L<Data::Functor>
 L<Data::Functor::Applicative>
 
 L<Data::Monad>
+
+L<Data::MonadPlus>
